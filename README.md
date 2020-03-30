@@ -4,7 +4,7 @@ sample code for publish and consume rapid event flow
 
 ## Architecture
 
-![High Level Overview] (https://user-images.githubusercontent.com/37622785/77907340-2634af00-7292-11ea-9236-36d3b828774c.png)
+![High Level Overview](https://user-images.githubusercontent.com/37622785/77907340-2634af00-7292-11ea-9236-36d3b828774c.png)
 
 ### Security Aspects
 When using serverless compute, we need to reflect on the multiple attack vectors, code vulnerabilities. 
@@ -17,6 +17,7 @@ The internal facing function app, should have only the IP(s) of the on-prem, or 
 
 Restricting traffic via IP configuration - see [documentation](https://docs.microsoft.com/en-us/azure/app-service/app-service-ip-restrictions)
 further more, to avoid attack which will lead to high compute load (and cost) we can limit the concurrency of the functions using the host.json:
+``` json
 "extensions": {
     "http": {
       "routePrefix": "api",
@@ -25,7 +26,7 @@ further more, to avoid attack which will lead to high compute load (and cost) we
       "dynamicThrottlesEnabled": true
     }
   }
-
+```
 Azure Function scale and restrictions see [documentation](https://docs.microsoft.com/en-us/azure/azure-functions/functions-scale)
 
 #### WAF
@@ -33,7 +34,7 @@ WAF will provides centralized protection of your web applications from common ex
 Deploy a WAF as explained in this [document](https://docs.microsoft.com/en-us/azure/web-application-firewall/ag/application-gateway-web-application-firewall-portal)
 
 #### Optional Assets
-Azure Front Door see [documentation] (https://docs.microsoft.com/en-us/azure/frontdoor/quickstart-create-front-door)
+Azure Front Door see [documentation](https://docs.microsoft.com/en-us/azure/frontdoor/quickstart-create-front-door)
 
 
 ## External References
