@@ -17,6 +17,7 @@ The internal facing function app, should have only the IP(s) of the on-prem, or 
 
 Restricting traffic via IP configuration - see [documentation](https://docs.microsoft.com/en-us/azure/app-service/app-service-ip-restrictions)
 further more, to avoid attack which will lead to high compute load (and cost) we can limit the concurrency of the functions using the host.json:
+``` json
 "extensions": {
     "http": {
       "routePrefix": "api",
@@ -25,7 +26,7 @@ further more, to avoid attack which will lead to high compute load (and cost) we
       "dynamicThrottlesEnabled": true
     }
   }
-
+```
 Azure Function scale and restrictions see [documentation](https://docs.microsoft.com/en-us/azure/azure-functions/functions-scale)
 
 #### WAF
