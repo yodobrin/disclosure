@@ -34,7 +34,7 @@ WAF will provides centralized protection of your web applications from common ex
 Deploy a WAF as explained in this [document](https://docs.microsoft.com/en-us/azure/web-application-firewall/ag/application-gateway-web-application-firewall-portal)
 
 #### Optional Assets
-Azure Front Door see [documentation] (https://docs.microsoft.com/en-us/azure/frontdoor/quickstart-create-front-door)
+Azure Front Door see [documentation](https://docs.microsoft.com/en-us/azure/frontdoor/quickstart-create-front-door)
 
 
 ## External References
