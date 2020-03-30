@@ -4,7 +4,7 @@ sample code for publish and consume rapid event flow
 
 ## Architecture
 
-![High Level Overview] (https://user-images.githubusercontent.com/37622785/77907340-2634af00-7292-11ea-9236-36d3b828774c.png)
+![High Level Overview](https://user-images.githubusercontent.com/37622785/77907340-2634af00-7292-11ea-9236-36d3b828774c.png)
 
 ### Security Aspects
 When using serverless compute, we need to reflect on the multiple attack vectors, code vulnerabilities. 
