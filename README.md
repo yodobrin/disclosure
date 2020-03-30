@@ -27,6 +27,21 @@ further more, to avoid attack which will lead to high compute load (and cost) we
     }
   }
 ```
+
+Your local settings would have at least these elements:
+``` json
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "<your storage connection string>",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "REDIS_CONN": "<your redis connection string>",
+        "DEFAULT_TTL": "60"
+
+    }
+}
+```
+
 Azure Function scale and restrictions see [documentation](https://docs.microsoft.com/en-us/azure/azure-functions/functions-scale)
 
 #### WAF
