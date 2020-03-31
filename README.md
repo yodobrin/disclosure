@@ -51,6 +51,7 @@ Deploy a WAF as explained in this [document](https://docs.microsoft.com/en-us/az
 #### Optional Assets
 Azure Front Door see [documentation](https://docs.microsoft.com/en-us/azure/frontdoor/quickstart-create-front-door)
 
+APIM & APG - please see [blog-post](https://medium.com/azure-architects/azure-api-management-and-application-gateway-integration-a31fde80f3db) for more information on how the integration between the two products can increase your control over the exposed APIs.
 
 ## External References
 [Azure functions. Limiting throughput and scalability of a serverless app](https://medium.com/microsoftazure/azure-functions-limiting-throughput-and-scalability-of-a-serverless-app-5b1c381491e3)
