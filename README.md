@@ -48,10 +48,9 @@ Azure Function scale and restrictions see [documentation](https://docs.microsoft
 WAF will provides centralized protection of your web applications from common exploits and vulnerabilities. 
 Deploy a WAF as explained in this [document](https://docs.microsoft.com/en-us/azure/web-application-firewall/ag/application-gateway-web-application-firewall-portal)
 
-#### Optional Assets
+#### Additional / Optional Assets
 Azure Front Door see [documentation](https://docs.microsoft.com/en-us/azure/frontdoor/quickstart-create-front-door)
 
 APIM & APG - please see [blog-post](https://medium.com/azure-architects/azure-api-management-and-application-gateway-integration-a31fde80f3db) for more information on how the integration between the two products can increase your control over the exposed APIs.
 
-## External References
-[Azure functions. Limiting throughput and scalability of a serverless app](https://medium.com/microsoftazure/azure-functions-limiting-throughput-and-scalability-of-a-serverless-app-5b1c381491e3)
+Please see this [blog-post](https://medium.com/microsoftazure/azure-functions-limiting-throughput-and-scalability-of-a-serverless-app-5b1c381491e3) for information limiting throughput and scalability of a Azure Functions.
