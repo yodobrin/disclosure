@@ -28,19 +28,32 @@ namespace disclosure
 {
     public static class GetEvents
     {
+        private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+        {
+            string cacheConnection = Environment.GetEnvironmentVariable("REDIS_CONN");
+            return ConnectionMultiplexer.Connect(cacheConnection);
+        });
+
+        public static ConnectionMultiplexer Connection
+        {
+            get
+            {
+                return lazyConnection.Value;
+            }
+        }
         [FunctionName("GetEvents")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("GetEvents function processed a request.");
             // redis
             string connectionString = Environment.GetEnvironmentVariable("REDIS_CONN");
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(connectionString);
-            var endpoints = redis.GetEndPoints();
+            // ConnectionMultiplexer redis = Connection.g //ConnectionMultiplexer.Connect(connectionString);
+            var endpoints = Connection.GetEndPoints();
             // add check on the array length
-            var server = redis.GetServer(endpoints[0]);
-            IDatabase cache = redis.GetDatabase();            
+            var server = Connection.GetServer(endpoints[0]);
+            IDatabase cache = Connection.GetDatabase();            
             
             var keys = server.Keys(cache.Database);
             
@@ -53,6 +66,7 @@ namespace disclosure
                     
             string responseMessage = response.ToString();
             response.Flush();
+            lazyConnection.Value.Dispose();
             return new OkObjectResult(responseMessage);
         }
     }

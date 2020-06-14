@@ -46,10 +46,15 @@ namespace disclosure
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string alertMessage = data?.alertMessage;
             string sttl = data?.ttl;
+
+            string xml = data?.xml;
+            
+            string revisedAlert = alertMessage + " with xml: " + xml;
+
             int ttl = (string.IsNullOrEmpty(sttl))? DefTTL: int.Parse(sttl);
             string uid = Guid.NewGuid().ToString();
             TimeSpan t = new TimeSpan(0,0,ttl);
-            cache.StringSet(uid,alertMessage,t);
+            cache.StringSet(uid,revisedAlert,t);
 
             return new OkObjectResult("");
         }
