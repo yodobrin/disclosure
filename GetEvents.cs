@@ -28,19 +28,19 @@ namespace disclosure
 {
     public static class GetEvents
     {
-        private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-        {
-            string cacheConnection = Environment.GetEnvironmentVariable("REDIS_CONN");
-            return ConnectionMultiplexer.Connect(cacheConnection);
-        });
+        // private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+        // {
+        //     string cacheConnection = Environment.GetEnvironmentVariable("REDIS_CONN");
+        //     return ConnectionMultiplexer.Connect(cacheConnection);
+        // });
 
-        public static ConnectionMultiplexer Connection
-        {
-            get
-            {
-                return lazyConnection.Value;
-            }
-        }
+        // public static ConnectionMultiplexer Connection
+        // {
+        //     get
+        //     {
+        //         return lazyConnection.Value;
+        //     }
+        // }
         [FunctionName("GetEvents")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -48,12 +48,18 @@ namespace disclosure
         {
             log.LogInformation("GetEvents function processed a request.");
             // redis
-            string connectionString = Environment.GetEnvironmentVariable("REDIS_CONN");
+            Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                string cacheConnection = Environment.GetEnvironmentVariable("REDIS_CONN");
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            // string connectionString = Environment.GetEnvironmentVariable("REDIS_CONN");
             // ConnectionMultiplexer redis = Connection.g //ConnectionMultiplexer.Connect(connectionString);
-            var endpoints = Connection.GetEndPoints();
+            var endpoints = lazyConnection.Value.GetEndPoints();
             // add check on the array length
-            var server = Connection.GetServer(endpoints[0]);
-            IDatabase cache = Connection.GetDatabase();            
+            var server = lazyConnection.Value.GetServer(endpoints[0]);
+            IDatabase cache = lazyConnection.Value.GetDatabase();            
             
             var keys = server.Keys(cache.Database);
             
