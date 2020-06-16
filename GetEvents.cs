@@ -28,19 +28,7 @@ namespace disclosure
 {
     public static class GetEvents
     {
-        // private static Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-        // {
-        //     string cacheConnection = Environment.GetEnvironmentVariable("REDIS_CONN");
-        //     return ConnectionMultiplexer.Connect(cacheConnection);
-        // });
-
-        // public static ConnectionMultiplexer Connection
-        // {
-        //     get
-        //     {
-        //         return lazyConnection.Value;
-        //     }
-        // }
+        
         [FunctionName("GetEvents")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
@@ -54,8 +42,7 @@ namespace disclosure
                 return ConnectionMultiplexer.Connect(cacheConnection);
             });
 
-            // string connectionString = Environment.GetEnvironmentVariable("REDIS_CONN");
-            // ConnectionMultiplexer redis = Connection.g //ConnectionMultiplexer.Connect(connectionString);
+
             var endpoints = lazyConnection.Value.GetEndPoints();
             // add check on the array length
             var server = lazyConnection.Value.GetServer(endpoints[0]);
@@ -64,16 +51,18 @@ namespace disclosure
             var keys = server.Keys(cache.Database);
             
             StringWriter response = new StringWriter();
-            response.WriteLine("Got the following from cache:");
+            response.WriteLine("Got the following from cache: ");
+            int counter = 0;
             foreach (var key in keys)
             {
                 response.WriteLine(cache.StringGet(key).ToString());
+                counter++;
             }
                     
-            string responseMessage = response.ToString();
+            string responseMessage = $"got {counter} messages \n\n {response.ToString()}";
             response.Flush();
             lazyConnection.Value.Dispose();
-            return new OkObjectResult(responseMessage);
+            return new OkObjectResult(responseMessage);            
         }
     }
 }

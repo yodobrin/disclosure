@@ -35,9 +35,15 @@ namespace disclosure
         {
             log.LogInformation("PublishEvent function processed a request.");
             
-            string connectionString = Environment.GetEnvironmentVariable("REDIS_CONN");
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(connectionString);
-            IDatabase cache = redis.GetDatabase();
+            Lazy<ConnectionMultiplexer> lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                string cacheConnection = Environment.GetEnvironmentVariable("REDIS_CONN");
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            // string connectionString = Environment.GetEnvironmentVariable("REDIS_CONN");
+            // ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(connectionString);
+            IDatabase cache = lazyConnection.Value.GetDatabase();
 
             string defaultTTL = Environment.GetEnvironmentVariable("DEFAULT_TTL");
             int DefTTL = int.Parse(defaultTTL);
@@ -55,8 +61,8 @@ namespace disclosure
             string uid = Guid.NewGuid().ToString();
             TimeSpan t = new TimeSpan(0,0,ttl);
             cache.StringSet(uid,revisedAlert,t);
-
-            return new OkObjectResult("");
+            lazyConnection.Value.Dispose();
+            return new OkObjectResult("published");
         }
     }
 }
