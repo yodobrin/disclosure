@@ -16,7 +16,7 @@ namespace disclosure
     {
         [FunctionName("GetEventsCos")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "post", "get", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("GetEventsCos processed a request.");
@@ -40,14 +40,14 @@ namespace disclosure
                 int count = currentResultSet.Count;
                 if(count == 0)
                 {
-                    return new NotFoundObjectResult($"No active alerts");
+                    return new OkObjectResult($"No active alerts");
                 }
-
+        
                 response.WriteLine($"Got {count} alerts with the following from cache:\n");
                 foreach (object alert in currentResultSet)
                 {
                     // alerts.Add(alert);
-                    log.LogInformation($"alert: {alert.ToString()}");
+                    // log.LogInformation($"alert: {alert.ToString()}");
                     response.WriteLine(alert.ToString()+ "\n");
                 }
             }
