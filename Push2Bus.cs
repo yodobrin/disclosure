@@ -38,14 +38,17 @@ namespace disclosure
             for (int i = 0; i < count; i++)
             {
                 string pkey = Guid.NewGuid().ToString();
-                data.id = pkey;            
-                log.LogInformation($"Push2Bus pushed one message with pkey:{pkey}");
+                data.id = pkey;
+                string ttl = data.ttl;
+                log.LogInformation($"Push2Bus pushed one message with pkey:{pkey} with ttl:{ttl} in sec");
                 string alert = JsonConvert.SerializeObject(data);
                 log.LogInformation($"Push2Bus sending to topic {TopicName} the message:{alert}");
-                var message = new Message(Encoding.UTF8.GetBytes(alert));
+                Message message = new Message(Encoding.UTF8.GetBytes(alert));
+                TimeSpan span = TimeSpan.FromSeconds(double.Parse(ttl));
+                message.TimeToLive = span;
                 
                 message.ContentType = System.Net.Mime.MediaTypeNames.Application.Json;
-                string ttl = data.ttl;
+                
                 //message.TimeToLive = new TimeSpan( long.Parse(ttl) * 10^7 );
                 await topicClient.SendAsync(message);
                 
