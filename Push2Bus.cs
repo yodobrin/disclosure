@@ -45,6 +45,7 @@ namespace disclosure
                 log.LogInformation($"Push2Bus sending to topic {TopicName} the message:{alert}");
                 Message message = new Message(Encoding.UTF8.GetBytes(alert));
                 TimeSpan span = TimeSpan.FromSeconds(double.Parse(ttl));
+                // TimeSpan.f
                 message.TimeToLive = span;
                 
                 message.ContentType = System.Net.Mime.MediaTypeNames.Application.Json;
