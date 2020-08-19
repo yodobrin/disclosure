@@ -11,18 +11,24 @@ import os
 
 from azure.servicebus import SubscriptionClient
 
+CONNECTION_STR = os.environ['SERVICE_BUS_CONNECTION_STR']
+TOPIC_NAME = os.environ["SERVICE_BUS_TOPIC_NAME"]
+SUBSCRIPTION_NAME = os.environ["SERVICE_BUS_SUBSCRIPTION_NAME"]
 
-connection_str = os.environ['SERVICE_BUS_CONNECTION_STR']
 
 if __name__ == '__main__':
 
     sub_client = SubscriptionClient.from_connection_string(
-        connection_str, name="pytopic/Subscriptions/pysub", debug=False)
+        CONNECTION_STR, name=SUBSCRIPTION_NAME,topic=TOPIC_NAME, debug=False)
+    
+    print("Got subscription clinet for " + TOPIC_NAME + " using the " + SUBSCRIPTION_NAME +" subscription" )
 
     with sub_client.get_receiver() as receiver:
-        batch = receiver.fetch_next(timeout=10)
+        # using no value for the timeout, allow for an active receiver 
+        batch = receiver.fetch_next()
         while batch:
             print("Received {} messages".format(len(batch)))
             for message in batch:
                 message.complete()
-            batch = receiver.fetch_next(timeout=10)
+                print(message)
+            batch = receiver.fetch_next()
