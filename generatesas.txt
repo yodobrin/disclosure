@@ -1,0 +1,16 @@
+rgname=<your resource group>
+servicebus_uri=<your name space>.servicebus.windows.net/<your topic>
+shared_access_key_name=<name of the shared access policy>
+shared_access_key=<key from the shared access policy>
+
+EXPIRY=${EXPIRY:=$((60 * 60 * 24 * 30 * 12))}
+ENCODED_URI=$(echo -n $servicebus_uri | jq -s -R -r @uri)
+TTL=$(($(date +%s) + $EXPIRY))
+UTF8_SIGNATURE=$(printf "%s\n%s" $ENCODED_URI $TTL | iconv -t utf8)
+
+
+HASH=$(echo -n "$UTF8_SIGNATURE" | openssl sha256 -hmac $shared_access_key -binary | base64)
+
+ENCODED_HASH=$(echo -n $HASH | jq -s -R -r @uri)
+
+echo -n "SharedAccessSignature sr=$ENCODED_URI&sig=$ENCODED_HASH&se=$TTL&skn=$shared_access_key_name"
